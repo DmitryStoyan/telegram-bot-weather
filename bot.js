@@ -1,12 +1,11 @@
+require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 const axios = require("axios");
 
-// 327e758507261e26f398a39cd23e19af
-
 const userStates = {};
 
-const bot = new Telegraf("6821098737:AAFhzZV5fTeHGnbG5jJ_E4cYPH9sP86Sb6c");
+const bot = new Telegraf(process.env.TG_API_KEY);
 bot.start((ctx) => {
   ctx.reply("Добро пожаловать в бот актуальной погоды =)");
   userStates[ctx.chat.id] = "STARTED";
@@ -15,7 +14,7 @@ bot.on("message", async (ctx) => {
   const userId = ctx.chat.id;
   if (ctx.message.location) {
     console.log(ctx.message.location);
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${ctx.message.location.latitude}&lon=${ctx.message.location.longitude}&units=metric&lang=ru&appid=327e758507261e26f398a39cd23e19af`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${ctx.message.location.latitude}&lon=${ctx.message.location.longitude}&units=metric&lang=ru&appid=${process.env.WEATHER_API_KEY}`;
     const response = await axios.get(url);
     console.log(response);
     ctx.reply(
@@ -30,6 +29,7 @@ bot.on("message", async (ctx) => {
     ) {
       ctx.reply("Здарова! Актуальная погода интересует?");
       userStates[userId] = "AWAITING_WEATHER_CONFIRMATION";
+      console.log(ctx);
     } else if (
       ctx.message.text == "Да" &&
       userStates[userId] === "AWAITING_WEATHER_CONFIRMATION"
