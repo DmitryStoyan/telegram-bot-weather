@@ -1,6 +1,6 @@
 import { setWebhook } from "telebot-vercel";
-import bot from "../bot.mjs";
+import bot from "./bot.js";
 
-const path = "/telegram.mjs";
+const path = "./telegram.mjs";
 
 export default setWebhook({ bot, path, handleErrors: true });
