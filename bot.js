@@ -23,19 +23,11 @@ bot.on("message", async (ctx) => {
   }
 
   if (ctx.message.text) {
-    if (
-      ctx.message.text == "Привет" &&
-      (!userStates[userId] || userStates[userId] === "STARTED")
-    ) {
+    if (ctx.message.text == "Привет") {
       ctx.reply("Здарова! Актуальная погода интересует?");
-      userStates[userId] = "AWAITING_WEATHER_CONFIRMATION";
-      console.log(ctx);
-    } else if (
-      ctx.message.text == "Да" &&
-      userStates[userId] === "AWAITING_WEATHER_CONFIRMATION"
-    ) {
+      console.log(ctx.message);
+    } else if (ctx.message.text == "Да") {
       ctx.reply("Тогда скинь геопозицию, сделаю по красоте!");
-      userStates[userId] = "AWAITING_LOCATION";
     }
   }
 });
