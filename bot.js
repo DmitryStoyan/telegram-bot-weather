@@ -3,15 +3,11 @@ const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 const axios = require("axios");
 
-const userStates = {};
-
 const bot = new Telegraf(process.env.TG_API_KEY);
 bot.start((ctx) => {
   ctx.reply("Добро пожаловать в бот актуальной погоды =)");
-  userStates[ctx.chat.id] = "STARTED";
 });
 bot.on("message", async (ctx) => {
-  const userId = ctx.chat.id;
   if (ctx.message.location) {
     console.log(ctx.message.location);
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${ctx.message.location.latitude}&lon=${ctx.message.location.longitude}&units=metric&lang=ru&appid=${process.env.WEATHER_API_KEY}`;
