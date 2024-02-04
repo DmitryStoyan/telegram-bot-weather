@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { Telegraf } = require("telegraf");
-const { message } = require("telegraf/filters");
 const axios = require("axios");
 
 const bot = new Telegraf(process.env.TG_API_KEY);
@@ -11,11 +10,18 @@ bot.on("message", async (ctx) => {
   if (ctx.message.location) {
     console.log(ctx.message.location);
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${ctx.message.location.latitude}&lon=${ctx.message.location.longitude}&units=metric&lang=ru&appid=${process.env.WEATHER_API_KEY}`;
-    const response = await axios.get(url);
-    console.log(response);
-    ctx.reply(
-      `Район: ${response.data.name} \nТемпература: ${response.data.main.temp}°C`
-    );
+    try {
+      const response = await axios.get(url);
+      console.log(response);
+      ctx.reply(
+        `Район: ${response.data.name} \nТемпература: ${response.data.main.temp}°C`
+      );
+    } catch (error) {
+      console.error(error);
+      ctx.reply(
+        "Произошла ошибка при запросе погоды. Попробуйте еще раз позже."
+      );
+    }
   }
 
   if (ctx.message.text) {
